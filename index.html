@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Vue Component Blog Post Example</title>
+    <script src="https://unpkg.com/vue"></script>
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <script src="comps.js"></script>
+  </head>
+  <body>
+    <div id="dynamic-component-demo">
+      <button
+        v-for="tab in tabs"
+        v-bind:key="tab"
+        v-bind:class="['tab-button', { active: currentTab === tab }]"
+        v-on:click="currentTab = tab"
+      >
+        {{ tab }}
+      </button>
+
+      <keep-alive>
+        <component v-bind:is="currentTabComponent" class="tab"></component>
+      </keep-alive>
+    </div>
+
+    <script>
+      Vue.component("tab-archive", {
+        template: "<div>Archive component</div>"
+      });
+
+      new Vue({
+        el: "#dynamic-component-demo",
+        data: {
+          currentTab: "Posts",
+          tabs: ["Posts", "Archive"]
+        },
+        computed: {
+          currentTabComponent: function () {
+            return "tab-" + this.currentTab.toLowerCase();
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
